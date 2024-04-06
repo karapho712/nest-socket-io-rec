@@ -26,6 +26,9 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+- See commit log to follow tutorial on youtube
+  - Belajar NestJs - Membuat server chat menggunakan Socket.Io Part(https://www.youtube.com/watch?v=2LY7VFsb87A)
+
 ## Installation
 
 ```bash
