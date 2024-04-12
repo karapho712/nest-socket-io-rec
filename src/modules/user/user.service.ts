@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { omit } from 'lodash';
+import dataSource from 'src/db/data-source';
 
 @Injectable()
 export class UserService {
@@ -22,12 +23,22 @@ export class UserService {
   }
 
   async findByEmail(email: string) {
-    return this.userRepository
-      .findOneOrFail({
-        where: {
-          email: email,
-        },
-      })
+    // return this.userRepository
+    //   .findOneOrFail({
+    //     where: {
+    //       email: email,
+    //     },
+    //   })
+    //   .catch(() => {
+    //     throw new UnauthorizedException('User not found');
+    //   });
+
+    return await dataSource
+      .getRepository(User)
+      .createQueryBuilder('user')
+      .where('user.email = :email', { email: email })
+      .addSelect('user.password')
+      .getOne()
       .catch(() => {
         throw new UnauthorizedException('User not found');
       });

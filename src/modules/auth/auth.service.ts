@@ -5,8 +5,8 @@ import { UserService } from '../user/user.service';
 import { LoginDto } from './dto/auth.dto';
 import { omit } from 'lodash';
 
-const EXPIRE_TIME = 15 * 60 * 1000; // In seconds
-const ACCESS_TOKEN_EXPIRE_TIME = '15m';
+const EXPIRE_TIME = 5 * 60 * 1000; // In seconds
+const ACCESS_TOKEN_EXPIRE_TIME = '5m';
 const REFRESH_TOKEN_EXPIRE_TIME = '20m';
 
 @Injectable()

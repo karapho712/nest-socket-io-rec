@@ -15,7 +15,7 @@ export class Message extends EntityRef {
 
   @ManyToOne('users', 'id', { onDelete: 'SET NULL', eager: true })
   @JoinColumn({ name: 'userId' })
-  userId: EntityRef<User>;
+  user: EntityRef<User>;
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
   createdAt: Date;

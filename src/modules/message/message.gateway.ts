@@ -1,14 +1,16 @@
 import {
+  ConnectedSocket,
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { MessageService } from './message.service';
 import { Req, UseGuards } from '@nestjs/common';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { JwtSocketGuard } from '../auth/guards/jwt-socket.guard';
+import { UserService } from '../user/user.service';
 
 @UseGuards(JwtSocketGuard)
 @WebSocketGateway({
@@ -21,7 +23,10 @@ export class MessageGateway {
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly messageService: MessageService) {}
+  constructor(
+    private readonly messageService: MessageService,
+    private readonly userService: UserService,
+  ) {}
 
   @SubscribeMessage('createMessage')
   async create(
@@ -49,5 +54,16 @@ export class MessageGateway {
     const messages = await this.messageService.findAll();
 
     return messages;
+  }
+
+  @SubscribeMessage('typing')
+  async typing(
+    @MessageBody('isTyping') isTyping: boolean,
+    @Req() req: any,
+    @ConnectedSocket() client: Socket,
+  ) {
+    const user = await this.userService.findById(req.user.id);
+
+    client.broadcast.emit('typing', { user, isTyping });
   }
 }
